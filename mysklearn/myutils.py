@@ -223,7 +223,7 @@ def group_by(table, header, groupby_col_name):
         groupby_val_subtable_index = group_names.index(groupby_val)
         groupby_subtables[groupby_val_subtable_index].append(row.copy()) #make a copy
 
-    return groupby_subtables
+    return group_names, groupby_subtables
 
 def pretty_print_step(step_name):
     print("===========================================")

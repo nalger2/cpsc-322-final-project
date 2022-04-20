@@ -434,6 +434,7 @@ class MyPyTable:
         """
         col_indexes: list col indexes
         """
+        col_indexes = sorted(col_indexes, reverse=True) #prevents removing the wrong indexes/out of range
         for col in col_indexes:
             self.column_names.pop(col)
         for row in self.data:

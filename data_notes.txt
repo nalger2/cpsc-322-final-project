@@ -52,7 +52,7 @@ AVG GLUCOSE LEVEL
         elif gluc <= 250:
             rating = 5
         else:
-            rating = 6
+            rating = 6 
 
 BMI
     between 10.3 and 97.6

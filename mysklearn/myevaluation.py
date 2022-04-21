@@ -298,7 +298,9 @@ def binary_recall_score(y_true, y_pred, labels=None, pos_label=None):
     labels = myutils.reorder_labels(labels, pos_label)
     matrix = confusion_matrix(y_true, y_pred, labels)
     tp, fp, tn, fn = myutils.binary_confusion_matrix_labels(matrix)
-    recall = tp / (tp + fn)
+    if(tp + fn) != 0:
+        recall = tp / (tp + fn)
+    else: recall=0
     return recall
 
 def binary_f1_score(y_true, y_pred, labels=None, pos_label=None):

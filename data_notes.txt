@@ -10,7 +10,8 @@ ID
     
 GENDER
      ['Female', 'Male', 'Other'] 
-     *categorical - convert to numerical
+     *categorical - converted to numerical
+    {"Female": 0, "Male": 1, "Other": 2}
 
 AGE 
     0.08 thru 82.0
@@ -28,15 +29,18 @@ HEART DISEASE
 
 EVER MARRIED
     ['No', 'Yes'] 
-    * categorical - convert to numerical
+    * categorical - converted to numerical
+    {"No": 0, "Yes": 1}
 
 WORK TYPE 
     ['Govt_job', 'Never_worked', 'Private', 'Self-employed', 'children'] 
     * categorical - convert to numerical
+    {'Govt_job':0, 'Never_worked':1, 'Private':2, 'Self-employed':3, 'children':4}
 
 RESIDENCE TYPE 
     ['Rural', 'Urban'] 
     * categorical - convert to numerical
+    {'Rural':0, 'Urban':1}
 
 AVG GLUCOSE LEVEL 
     between 55.12 and 271.74
@@ -61,6 +65,7 @@ BMI
 SMOKING STATUS
     ['Unknown', 'formerly smoked', 'never smoked', 'smokes']
     * categorical - convert to numerical
+    {'Unknown':0, 'formerly smoked':1, 'never smoked':2, 'smokes':3}
 
 STROKE - class label
     [0.0, 1.0] 

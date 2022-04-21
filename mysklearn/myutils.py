@@ -496,7 +496,7 @@ def discretize_glucose(gluc):
     return rating
 
     
-def clean_attributes_for_stroke_classification(stroke_data):
+def discretize_attributes_for_stroke_classification(stroke_data):
     stroke_data_discretized = copy.deepcopy(stroke_data)
     #remove irrelevant column: ID
     stroke_data_discretized.remove_columns([0])
@@ -509,6 +509,20 @@ def clean_attributes_for_stroke_classification(stroke_data):
         row[stroke_data_discretized.get_col_index("avg_glucose_level")] = discretize_glucose(glucose)
         bmi = row[stroke_data_discretized.get_col_index("bmi")]
         row[stroke_data_discretized.get_col_index("bmi")] = discretize_by_ten(bmi)
-    
+
     return stroke_data_discretized
 
+def numerize_all_strings(discretized_data):
+    stroke_data_numerized = copy.deepcopy(discretized_data)
+    #numerize
+    gender_dic = {"Female": 0, "Male": 1, "Other": 2}
+    married_dic = {"No": 0, "Yes": 1}
+    work_type_dic = {'Govt_job':0, 'Never_worked':1, 'Private':2, 'Self-employed':3, 'children':4}
+    residence_dic = {'Rural':0, 'Urban':1}
+    smoking_dic = {'Unknown':0, 'formerly smoked':1, 'never smoked':2, 'smokes':3}
+    general_numerize(stroke_data_numerized, "gender", gender_dic)
+    general_numerize(stroke_data_numerized, "ever_married", married_dic)
+    general_numerize(stroke_data_numerized, "work_type", work_type_dic)
+    general_numerize(stroke_data_numerized, "Residence_type", residence_dic)
+    general_numerize(stroke_data_numerized, "smoking_status", smoking_dic)
+    return stroke_data_numerized

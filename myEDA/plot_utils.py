@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import utils
+import myEDA.utils
 
 def bar_chart(x, y, title, x_axis_label, y_axis_label, rotation_choice, grid_lines_on=True):
     """Shows a pyplot bar chart with titles and labels

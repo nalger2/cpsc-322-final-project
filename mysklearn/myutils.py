@@ -3,10 +3,11 @@ This is a utility functions file with reusable functions I have
 implemented in mysklearn classes
 """
 import math
+import copy
 import numpy as np
 from tabulate import tabulate
 
-from mysklearn import myevaluation
+from mysklearn import myevaluation, mypytable
 
 def hi_low_discretizor(value):
     """Discretizes a value into 2 categories: high or low
@@ -467,24 +468,47 @@ def majority_vote(list_instances):
     max_class = max(counts, key=counts.get)
     return max_class
 
-#TEST ENTROPY SELECTION
-instances = [
-        ["Senior", "Java", "no", "no", "False"],
-        ["Senior", "Java", "no", "yes", "False"],
-        ["Mid", "Python", "no", "no", "True"],
-        ["Junior", "Python", "no", "no", "True"],
-        ["Junior", "R", "yes", "no", "True"],
-        ["Junior", "R", "yes", "yes", "False"],
-        ["Mid", "R", "yes", "yes", "True"],
-        ["Senior", "Python", "no", "no", "False"],
-        ["Senior", "R", "yes", "no", "True"],
-        ["Junior", "Python", "yes", "no", "True"],
-        ["Senior", "Python", "yes", "yes", "True"],
-        ["Mid", "Python", "no", "yes", "True"],
-        ["Mid", "Java", "yes", "no", "True"],
-        ["Junior", "Python", "no", "yes", "False"]
-    ]
-attributes = ["att0", "att1", "att2", "att3"]
-domains =  {0: ['Junior', 'Mid', 'Senior'], 1: ['Java', 'Python', 'R'], 2: ['no', 'yes'], 3: ['no', 'yes']}
-#att_selected = select_attribute(instances, attributes, domains)
-#print("final choice:", att_selected)
+"""Utils below specifically for final project"""
+
+def general_numerize(stroke_data, col_to_numerize, dic_strings_to_nums):
+    col_index = stroke_data.get_col_index(col_to_numerize)
+    for row in stroke_data.data:
+        val = row[col_index]
+        row[col_index] = dic_strings_to_nums[val]
+
+def discretize_by_ten(age):
+    #returns 0 for  0-9, 1 for 10-19 etc
+    return age // 10
+
+def discretize_glucose(gluc):
+    if gluc <= 90:
+        rating = 1
+    elif gluc == 130:
+        rating = 2
+    elif gluc <= 170:
+        rating = 3
+    elif gluc <= 210:
+        rating = 4
+    elif gluc <= 250:
+        rating = 5
+    else:
+        rating = 6
+    return rating
+
+    
+def clean_attributes_for_stroke_classification(stroke_data):
+    stroke_data_discretized = copy.deepcopy(stroke_data)
+    #remove irrelevant column: ID
+    stroke_data_discretized.remove_columns([0])
+
+    #discretize
+    for row in stroke_data_discretized.data:
+        age = row[stroke_data_discretized.get_col_index("age")]
+        row[stroke_data_discretized.get_col_index("age")] = discretize_by_ten(age)
+        glucose = row[stroke_data_discretized.get_col_index("avg_glucose_level")]
+        row[stroke_data_discretized.get_col_index("avg_glucose_level")] = discretize_glucose(glucose)
+        bmi = row[stroke_data_discretized.get_col_index("bmi")]
+        row[stroke_data_discretized.get_col_index("bmi")] = discretize_by_ten(bmi)
+    
+    return stroke_data_discretized
+

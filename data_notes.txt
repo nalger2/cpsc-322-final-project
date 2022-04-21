@@ -10,7 +10,7 @@ ID
     
 GENDER
      ['Female', 'Male', 'Other'] 
-     *categorical
+     *categorical - convert to numerical
 
 AGE 
     [0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64, 0.72, 0.8, 0.88, 1.0, 
@@ -47,6 +47,15 @@ RESIDENCE TYPE
 AVG GLUCOSE LEVEL 
     between 55.12 and 271.74
     * need to discretize
+
+BMI
+    between 10.3 and 97.6
+    * need to discretize
+
+
+SMOKING STATUS
+    ['Unknown', 'formerly smoked', 'never smoked', 'smokes']
+    * categorical - convert to numerical
 
 STROKE - class label
     [0.0, 1.0] 

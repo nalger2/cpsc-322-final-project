@@ -297,9 +297,9 @@ def binary_confusion_matrix_labels(matrix):
         fn (int): false negatives
     """
     tp = matrix[0][0]
-    fp = matrix[1][0]
+    fp = matrix[0][1]
     tn = matrix[1][1]
-    fn = matrix[0][1]
+    fn = matrix[1][0]
     return tp, fp, tn, fn
 
 def package_classifier_results(y_true, y_pred, labels):
@@ -460,6 +460,7 @@ def majority_vote(list_instances):
     #print("classes:", classes)
     class_labels = set(classes)
     counts = {c:0 for c in class_labels}
+    print("counts", counts)
     for instance in list_instances:
         counts[instance[-1]] += 1
     #if class counts are all equal, alphabetic first class

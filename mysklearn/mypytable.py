@@ -314,6 +314,18 @@ class MyPyTable:
             print("ERROR: column name",col_name, "does not exist in this table")
             return 0
 
+    def get_col_indexes(self, col_names):
+        """Return the index of a column given the column's name.
+        Args:
+            col_name(str): column's name
+        Returns:
+            col_index(int): column's index
+        """
+        col_indexes = []
+        for col_name in col_names:
+            col_indexes.append(self.get_col_index(col_name))
+        return col_indexes
+
     @staticmethod
     def find_mid(numlist):
         """Find the midpoint of a list, or halfway between the min and max

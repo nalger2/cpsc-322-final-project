@@ -2,7 +2,7 @@ import operator
 import math
 
 #from mysklearn import myutils
-from mysklearn.mysimplelinearregressor import MySimpleLinearRegressor
+#from mysklearn.mysimplelinearregressor import MySimpleLinearRegressor
 
 def group_by_tree(instances, attribute_name, index):
     seen = []

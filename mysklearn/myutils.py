@@ -460,6 +460,7 @@ def majority_vote(list_instances):
     #print("classes:", classes)
     class_labels = set(classes)
     counts = {c:0 for c in class_labels}
+    print("counts", counts)
     for instance in list_instances:
         counts[instance[-1]] += 1
     #if class counts are all equal, alphabetic first class

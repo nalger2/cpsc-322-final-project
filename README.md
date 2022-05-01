@@ -1,7 +1,7 @@
-# CPSC 322 Final Project: 
+# CPSC 322 Final Project
 ## Nelly Alger & Maya Fleming
 
-This project performs classification of stroke data, predicting whether a patient is likely to have a stroke or not based on parameters like gender, age, various diseases, and smoking status.
+This project performs classification of stroke data with 4 different classifiers, predicting whether a patient is likely to have a stroke or not based on parameters like gender, age, various diseases, and smoking status.
 
 ## Project Structure
 * `Technical_Report.ipynb` describes our approach and findings, with interleaved code cells running our data cleaning, exploratory data analysis, and classification methods. 

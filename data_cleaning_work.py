@@ -14,7 +14,7 @@ def clean_data(random_seed_val, original_filename):
     np.random.seed(random_seed_val)
 
     filename = original_filename
-    table = mysklearn.mypytable.MyPyTable().load_from_file(filename)
+    table = MyPyTable().load_from_file(filename)
     print("length before 'NA' values removed:", len(table.data))
 
     table.remove_rows_with_missing_values()
@@ -38,7 +38,7 @@ def clean_data(random_seed_val, original_filename):
     for row in stroke_data:
         if row[10] == "Unknown" or row[10] == "unknown":
             unknown_count += 1
-    print("num of strokes with unknown smoking status:", unknown_count)
+    #print("num of strokes with unknown smoking status:", unknown_count)
 
     downsized_non_stroke_data = []
     for i in range(0, 1000 - len(stroke_data)):
@@ -55,7 +55,7 @@ def clean_data(random_seed_val, original_filename):
 
     final_data = table_deep_copy
     final_data.data = data_downsized
-    print("length of final_data", len(final_data.data))
+    #print("length of final_data", len(final_data.data))
 
     final_data.save_to_file("input_data/stroke-data-downsized.csv")
 
@@ -68,8 +68,8 @@ def clean_data(random_seed_val, original_filename):
         elif row[-1] == 1.0:
             stroke_count += 1
 
-    print("non-stroke amount:", non_stroke_count)
-    print("stroke amount:", stroke_count)
+    #print("non-stroke amount:", non_stroke_count)
+    #print("stroke amount:", stroke_count)
 
     # checking if theres any duplicate rows # can delete loop
     for i in range(len(final_data.data)): 
@@ -96,3 +96,11 @@ def clean_data(random_seed_val, original_filename):
     #stroke_data.remove_rows_with_missing_values()
     #stroke_data.remove_rows_with_missing_values_by_col()
     #print("len after removing missing vals", len(stroke_data.data))
+
+    #ATTRIBUTE SELECTION
+    data_for_attribute_selection = copy.deepcopy(stroke_data_cleaned_numeric)
+    #0gender,1age,2hypertension,3heart_disease,4ever_married,5work_type,6Residence_type,7avg_glucose_level,8bmi,9smoking_status,10stroke
+    #KEEP: 0, 1, 3, 8, 9, 10 REMOVE: 2, 4, 5, 6, 7
+    data_for_attribute_selection.remove_columns([2, 4, 5, 6, 7])
+    data_for_attribute_selection.save_to_file("input_data/stroke_data_atts_selected.csv")
+    print("-----attribute selection complete & saved-----")

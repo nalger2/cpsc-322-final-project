@@ -22,7 +22,7 @@ importlib.reload(mysklearn.myevaluation)
 import mysklearn.myevaluation as myevaluation
 
 def classify_data(fname, random_state_val):
-    print()
+    print("-------CLASSIFIYING DATA...-----")
     #loading data
     stroke_data = MyPyTable()
     stroke_data.load_from_file(fname)

@@ -383,3 +383,14 @@ class MyDecisionTreeClassifier:
             You will need to install graphviz in the Docker container as shown in class to complete this method.
         """
         pass # TODO: (BONUS) fix this
+
+class MyRandomForestClassifier:
+    def init(self):
+        self.X_train = None
+        self.y_train = None
+    
+    def fit(self, X_train, y_train):
+        pass
+    
+    def predict(self, X_test):
+        pass

@@ -11,7 +11,7 @@ from mysklearn.mypytable import MyPyTable
 
 import mysklearn.myclassifiers
 importlib.reload(mysklearn.myclassifiers)
-from mysklearn.myclassifiers import MyKNeighborsClassifier, MyDummyClassifier, MyNaiveBayesClassifier #, MyDecisionTreeClassifier
+from mysklearn.myclassifiers import MyKNeighborsClassifier, MyDummyClassifier, MyNaiveBayesClassifier, MyRandomForestClassifier
 
 import mysklearn.myclassifier_maya
 importlib.reload(mysklearn.myclassifier_maya)
@@ -39,6 +39,7 @@ def classify_data(fname, random_state_val):
     nb_clf = MyNaiveBayesClassifier()
     tree_clf = MyDecisionTreeClassifier()
     #TODO: random forest
+    #forest_clf = MyRandomForestClassifier()
 
     #Create X and y data
     X = [inst[:-1] for inst in stroke_data.data]
@@ -68,11 +69,15 @@ def classify_data(fname, random_state_val):
         for pred in nb_clf.predict(X_test):
             nb_y_pred.append(pred)
     
-    #fit and predict tree    #TODO ASK ABOUT THIS ERROR MESSAGE
+    #fit and predict tree    
         tree_clf.fit(X_train, y_train)
         for pred in tree_clf.predict(X_test):
             tree_y_pred.append(pred)
-    
+        
+        #forest_clf.fit(X_train, y_train)
+        #for pred in forest_clf.predict(X_test):
+        #    forest_y_pred.append(pred)  
+          
     predictions = [knn_y_pred, nb_y_pred, tree_y_pred] #TODO add tree, forest results
     titles = ["kNN Classifier (5 neighbors)", "Naive Bayes", "Decision Tree"]
 

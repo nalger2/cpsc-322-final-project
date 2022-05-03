@@ -10,6 +10,7 @@ This project performs classification of stroke data with 4 different classifiers
 * `----_work.py` files: call the functions from mysklearn and myEDA
     * These work files are essentially performing the EDA and classification but are stored outside of the report in order to reduce clutter
 * The folder `input_data`: contains the original dataset csv file: `stroke_data.csv`, as well as various cleaned versions of the dataset
+* `project_app.py` contains the flask app of our best classifier 
 
 ### Other Files
 * `test_myclassifiers`: demonstrates our test driven development, and houses the tests for our various classifiers. 

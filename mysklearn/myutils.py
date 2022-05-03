@@ -177,14 +177,15 @@ def pretty_print_classifier_result(step_num, classifier_name, test_set, predicti
     accuracy = correct / len(predictions)
     print("Accuracy:", accuracy)
 
-def randomize_in_place(alist, random_state, parallel_lists=None): #useful for train test split, etc in PA5
+def randomize_in_place(alist, random_state=None, parallel_lists=None): #useful for train test split, etc in PA5
     """Shuffles (randomizes) a list and parallel list in place.
     Args:
         alist (list): list to randomize
         random_state(int): to seed random state for reproducible results
         parallel_list (list): parallel list to alist for shuffling
     """
-    np.random.seed(random_state)
+    if random_state is not None:
+        np.random.seed(random_state)
     for i in range(len(alist)):
         #generate random index to swap value at i with
         rand_index = np.random.randint(0, len(alist)) #[0, len(alist))

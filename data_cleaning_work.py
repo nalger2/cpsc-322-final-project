@@ -100,7 +100,7 @@ def clean_data(random_seed_val, original_filename):
     #ATTRIBUTE SELECTION
     data_for_attribute_selection = copy.deepcopy(stroke_data_cleaned_numeric)
     #0gender,1age,2hypertension,3heart_disease,4ever_married,5work_type,6Residence_type,7avg_glucose_level,8bmi,9smoking_status,10stroke
-    #KEEP: 0, 1, 3, 8, 9, 10 REMOVE: 2, 4, 5, 6, 7
-    data_for_attribute_selection.remove_columns([2, 4, 5, 6, 7])
+    #KEEP: 1, 3, 7, 8, 9, 10 REMOVE: 0, 2, 4, 5, 6, 
+    data_for_attribute_selection.remove_columns([0, 2, 4, 5, 6])
     data_for_attribute_selection.save_to_file("input_data/stroke_data_atts_selected.csv")
     print("-----attribute selection complete & saved-----")

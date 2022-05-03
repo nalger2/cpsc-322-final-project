@@ -130,8 +130,8 @@ def stratified_kfold_cross_validation(X, y, n_splits=5, random_state=None, shuff
     #make a new list of indexes now that the class labels are sorted one then the other
     indexes = []
     for class_group in class_tables:
-        for instance in class_group:
-            indexes.append(instance[0]) #instance[0] is the instance's index
+        for i in range(len(class_group)):
+            indexes.append(i) #instance[0] is the instance's index
 
     #"deal" append indexes from len(X) into folds
     folds = [indexes[i::n_splits] for i in range(n_splits)]

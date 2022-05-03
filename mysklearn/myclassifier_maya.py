@@ -1,15 +1,17 @@
 import operator
 import math
+from random import seed
+import numpy as np
+from pytz import NonExistentTimeError
+from scipy import rand
 
-#from mysklearn import myutils
-#from mysklearn.mysimplelinearregressor import MySimpleLinearRegressor
+from mysklearn import myevaluation
 
 def group_by_tree(instances, attribute_name, index):
     seen = []
     for row in instances:
         if row[index] not in seen:
             seen.append(row[index])
-    #print(seen)
     groupby_instances = []
     for value in seen:
         for row in instances:
@@ -47,7 +49,6 @@ def calculate_entropy(self, instances, attributes, index, header):
         for label_amt in class_label_counts:
             fraction = label_amt / len(instances_for_att)
             value = (-fraction) * (math.log2(fraction))
-            #print("VALUE", value)
             total = total + value
         att_entropy.append(total)
     total = 0
@@ -99,10 +100,21 @@ def all_same_class(self, att_partition):
 
     return True
 
-def tdidt(self, current_instances, available_attributes, header, attribute_domain):
+def compute_random_subset(values, num_values):
+    values_copy = values[:] # shallow copy
+    np.random.shuffle(values_copy) # in place shuffle
 
+    return values_copy[:num_values]
+
+def tdidt(self, current_instances, available_attributes, header, attribute_domain):
+    
+    if self.random_forest == True:
+        available_attributes_to_split = compute_random_subset(available_attributes, self.F)
+    else:
+        available_attributes_to_split = available_attributes
+        
     # select an attribute to split on
-    attribute = select_attribute(self, current_instances, available_attributes, header)
+    attribute = select_attribute(self, current_instances, available_attributes_to_split, header)
     available_attributes.remove(attribute) # can't split on this again in
     # this subtree
     tree = ["Attribute", attribute] # start to build the tree!!
@@ -197,37 +209,6 @@ def tdidt_predict(self, header, tree, instance):
         if value_list[1] == instance[att_index]:
             return tdidt_predict(self, header, value_list[2], instance)
 
-def predict_decision(self, header, tree, class_label):
-
-    if tree[0] == "Leaf":
-        leaf_list = tree[0]
-        print("THEN", class_label, "=", end=' ')
-        leaf_label = tree[1]
-        print(leaf_label, end='\n')
-        return
-
-    if tree[0] == "Attribute":
-        att_label = tree[1]
-        print(att_label, "=", end=' ')
-
-        value_list = tree[2]
-        value_label = value_list[1]
-        print(value_label, end=' ')
-
-        if value_list[2] == "Leaf":
-            print("found a leaf")
-            leaf_list = value_list[2]
-            leaf_label = leaf_list[1]
-            print(leaf_label)
-            return
-
-        else:
-            if value_list[2][0] != "Leaf":
-                print("AND", end=' ')
-            predict_decision(self, header, value_list[2], class_label)
-
-
-
 class MyDecisionTreeClassifier:
     """Represents a decision tree classifier.
 
@@ -243,12 +224,14 @@ class MyDecisionTreeClassifier:
             https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html
         Terminology: instance = sample = row and attribute = feature = column
     """
-    def __init__(self):
+    def __init__(self, random_forest=False, F=None):
         """Initializer for MyDecisionTreeClassifier.
         """
         self.X_train = None
         self.y_train = None
         self.tree = None
+        self.random_forest = random_forest
+        self.F = F
 
     def fit(self, X_train, y_train):
         """Fits a decision tree classifier to X_train and y_train using the TDIDT
@@ -271,7 +254,7 @@ class MyDecisionTreeClassifier:
         # need fit_starter_code in testing because need header
         self.X_train = X_train
         self.y_train = y_train
-
+        
         att_header = []
         attribute_domain = {}
         for row in self.X_train:
@@ -291,7 +274,6 @@ class MyDecisionTreeClassifier:
 
         self.tree = tdidt(self, train, available_attribute, att_header, attribute_domain)
 
-
     def predict(self, X_test):
         """Makes predictions for test instances in X_test.
 
@@ -309,7 +291,6 @@ class MyDecisionTreeClassifier:
         for i in range(num_att):
             label = "att" + str(i)
             att_header.append(label)
-
         y_predicted = []
 
         for instance in X_test:
@@ -319,3 +300,90 @@ class MyDecisionTreeClassifier:
 
 
         return y_predicted
+
+def find_majority_vote(y_pred):
+    """
+    Finds the majority vote for y_predicted
+        Args: y_pred
+
+        Returns: Majority vote class label
+    """
+    
+    seen = []
+    total_instances = []
+
+    for value in y_pred:
+        if value[0] not in seen:
+            seen.append(value[0])
+    for value in seen:
+        count = 0
+        for label in y_pred:
+            if value == label[0]:
+                count += 1
+        total_instances.append(count)
+    
+    max_index = total_instances.index(max(total_instances))
+
+    return seen[max_index]
+    
+class MyRandomForestClassifier:
+    def __init__(self, N, M, F, random_forest=False):
+        self.X_train = None
+        self.y_train = None
+        self.random_forest = random_forest
+        self.N = N
+        self.M = M
+        self.F = F
+        self.trees = None
+
+    def fit(self, X_train, y_train):
+       
+        self.X_train = X_train
+        self.y_train = y_train
+        self.trees = []
+
+        accuracy_scores = []
+        M_trees = []
+        random_forest_clf = MyDecisionTreeClassifier(self.random_forest, self.F)
+        for i in range(self.N):
+            X_train_tree, X_validation_tree, y_train_tree, y_validation_tree = \
+                myevaluation.bootstrap_sample(self.X_train, self.y_train)
+        
+            random_forest_clf.fit(X_train_tree, y_train_tree)
+            y_pred = random_forest_clf.predict(X_validation_tree)
+
+            score = myevaluation.accuracy_score(y_validation_tree, y_pred)
+            M_trees.append(random_forest_clf.tree)
+            accuracy_scores.append(score)
+ 
+        zipped_pairs = zip(accuracy_scores, M_trees)
+        sorted_pairs = sorted(zipped_pairs)
+        tuples = zip(*sorted_pairs)
+        accuracy_scores, M_trees = [ list(tuple) for tuple in tuples]
+        accuracy_scores.reverse()
+        M_trees.reverse()
+                        
+        self.trees = M_trees[:self.M]
+        index_trees = []
+        for tree in self.trees:
+            index = self.trees.index(tree)
+            index_trees.append(index)
+
+
+    def predict(self, X_test):
+        
+        random_forest_clf = MyDecisionTreeClassifier()
+        y_pred = []
+        
+        for test in X_test:
+            unseen_pred = []
+            for tree in self.trees:
+                random_forest_clf.tree = tree
+                pred = random_forest_clf.predict([test]) # one y_pred value
+                unseen_pred.append(pred)
+            unseen_majority = find_majority_vote(unseen_pred)
+            y_pred.append(unseen_majority)
+
+        return y_pred
+
+        

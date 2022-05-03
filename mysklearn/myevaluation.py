@@ -30,7 +30,8 @@ def train_test_split(X, y, test_size=0.33, random_state=None, shuffle=True):
         Loosely based on sklearn's train_test_split():
             https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
     """
-    np.random.seed(random_state) #seed random
+    if random_state is not None:
+        np.random.seed(random_state) #seed random
     num_instances = len(X)
 
     #shuffle in place
@@ -70,7 +71,8 @@ def kfold_cross_validation(X, n_splits=5, random_state=None, shuffle=False):
             https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html
     """
     #seed random state
-    np.random.seed(random_state)
+    if random_state is not None:
+        np.random.seed(random_state)
     #shuffle if true
     X_indexes = list(range(len(X))) #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     if shuffle is True:
@@ -105,7 +107,8 @@ def stratified_kfold_cross_validation(X, y, n_splits=5, random_state=None, shuff
             https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold
     """
     #seed random state
-    np.random.seed(random_state)
+    if random_state is not None:
+        np.random.seed(random_state)
     #shuffle if true
     X_indexes = list(range(len(X))) #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     if shuffle is True:
@@ -162,7 +165,8 @@ def bootstrap_sample(X, y=None, n_samples=None, random_state=None):
             https://scikit-learn.org/stable/modules/generated/sklearn.utils.resample.html
     """
     #seed random
-    np.random.seed(random_state)
+    if random_state is not None:
+        np.random.seed(random_state)
     X_sample = []
     y_sample = []
     if n_samples is None: #default value

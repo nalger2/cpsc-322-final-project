@@ -3,7 +3,9 @@ sci-kit-learn libraries. Each test performs multiple tests case.
 """
 import numpy as np
 from sklearn import naive_bayes
-from sklearn.linear_model import LinearRegression #for testing
+from sklearn.linear_model import LinearRegression
+from mysklearn import myevaluation
+from mysklearn.myclassifier_maya import MyRandomForestClassifier #for testing
 
 from mysklearn.myclassifiers import MyNaiveBayesClassifier,\
     MyKNeighborsClassifier, MyDecisionTreeClassifier
@@ -461,3 +463,22 @@ def test_decision_tree_classifier_predict():
     tree_clf.fit(X_train_iphone, y_train_iphone)
     prediction3 = tree_clf.predict(X_test_3)
     assert prediction3 == ["yes", "yes"]
+
+interview_X_train = [
+        ["Senior", "Java", "no", "no"],
+        ["Senior", "Java", "no", "yes"],
+        ["Mid", "Python", "no", "no"],
+        ["Junior", "Python", "no", "no"],
+        ["Junior", "R", "yes", "no"],
+        ["Junior", "R", "yes", "yes"],
+        ["Mid", "R", "yes", "yes"],
+        ["Senior", "Python", "no", "no"],
+        ["Senior", "R", "yes", "no"],
+        ["Junior", "Python", "yes", "no"],
+        ["Senior", "Python", "yes", "yes"],
+        ["Mid", "Python", "no", "yes"],
+        ["Mid", "Java", "yes", "no"],
+        ["Junior", "Python", "no", "yes"]
+    ]
+interview_y_train = ["False", "False", "True", "True", "True", "False", "True", "False", "True",
+                         "True", "True", "True", "True", "False"]

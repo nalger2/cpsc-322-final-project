@@ -30,6 +30,7 @@ def classify_data(fname, random_state_val):
 
     #code to group data by class
     stroke_classes, stroke_data_by_class = myutils.group_by(stroke_data.data, stroke_data.column_names, "stroke")
+    stroke_classes = sorted(stroke_classes, reverse=True)
     print("classes:", stroke_classes)
     for partition in stroke_data_by_class:
         print("num instances of class", partition[0][-1], ":", len(partition))
@@ -78,7 +79,7 @@ def classify_data(fname, random_state_val):
         #for pred in forest_clf.predict(X_test):
         #    forest_y_pred.append(pred)  
           
-    predictions = [knn_y_pred, nb_y_pred, tree_y_pred] #TODO add tree, forest results
+    predictions = [knn_y_pred, nb_y_pred, tree_y_pred] #TODO forest results
     titles = ["kNN Classifier (5 neighbors)", "Naive Bayes", "Decision Tree"]
 
     for i in range(len(predictions)):

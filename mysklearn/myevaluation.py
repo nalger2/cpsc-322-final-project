@@ -270,7 +270,7 @@ def binary_precision_score(y_true, y_pred, labels=None, pos_label=None):
     if tp == 0 and fp == 0: #error for 0/0 = 0
         return 0
     precision = tp / (tp + fp)
-    print("precision", tp, "/", tp+fp, precision)
+    #print("precision", tp, "/", tp+fp, precision)
     return precision
 
 def binary_recall_score(y_true, y_pred, labels=None, pos_label=None):
@@ -302,7 +302,7 @@ def binary_recall_score(y_true, y_pred, labels=None, pos_label=None):
     if(tp + fn) != 0:
         recall = tp / (tp + fn)
     else: recall=0
-    print("recall", tp, "/", tp+fn, recall)
+    #print("recall", tp, "/", tp+fn, recall)
     return recall
 
 def binary_f1_score(y_true, y_pred, labels=None, pos_label=None):

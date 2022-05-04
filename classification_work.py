@@ -11,11 +11,11 @@ from mysklearn.mypytable import MyPyTable
 
 import mysklearn.myclassifiers
 importlib.reload(mysklearn.myclassifiers)
-from mysklearn.myclassifiers import MyKNeighborsClassifier, MyDummyClassifier, MyNaiveBayesClassifier, MyRandomForestClassifier
+from mysklearn.myclassifiers import MyKNeighborsClassifier, MyDummyClassifier, MyNaiveBayesClassifier
 
 import mysklearn.myclassifier_maya
 importlib.reload(mysklearn.myclassifier_maya)
-from mysklearn.myclassifier_maya import MyDecisionTreeClassifier
+from mysklearn.myclassifier_maya import MyDecisionTreeClassifier, MyRandomForestClassifier
 
 import mysklearn.myevaluation
 importlib.reload(mysklearn.myevaluation)
@@ -40,7 +40,7 @@ def classify_data(fname, random_state_val):
     nb_clf = MyNaiveBayesClassifier()
     tree_clf = MyDecisionTreeClassifier()
     #TODO: random forest
-    #forest_clf = MyRandomForestClassifier()
+    #forest_clf = MyRandomForestClassifier(N=, M=, F=, random_forest=True)
 
     #Create X and y data
     X = [inst[:-1] for inst in stroke_data.data]

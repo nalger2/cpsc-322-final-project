@@ -30,7 +30,7 @@ def classify_data(fname, random_state_val):
 
     #code to group data by class
     stroke_classes, stroke_data_by_class = myutils.group_by(stroke_data.data, stroke_data.column_names, "stroke")
-    #stroke_classes = sorted(stroke_classes, reverse=True)
+    stroke_classes = sorted(stroke_classes, reverse=True)
     print("classes:", stroke_classes)
     for partition in stroke_data_by_class:
         print("num instances of class", partition[0][-1], ":", len(partition))
@@ -40,7 +40,7 @@ def classify_data(fname, random_state_val):
     nb_clf = MyNaiveBayesClassifier()
     tree_clf = MyDecisionTreeClassifier()
     #TODO: random forest
-    #forest_clf = MyRandomForestClassifier(N=, M=, F=, random_forest=True)
+    forest_clf = MyRandomForestClassifier(random_forest=True, N=5, M=3, F=2)
 
     #Create X and y data
     X = [inst[:-1] for inst in stroke_data.data]
@@ -50,7 +50,7 @@ def classify_data(fname, random_state_val):
     knn_y_pred = []
     nb_y_pred = []
     tree_y_pred = []
-    #forest_y_pred = []
+    forest_y_pred = []
 
     y_true = []
     X_train_folds, X_test_folds = myevaluation.kfold_cross_validation(X, n_splits=10, random_state=random_state_val, shuffle=True)
@@ -77,12 +77,12 @@ def classify_data(fname, random_state_val):
         for pred in tree_clf.predict(X_test):
             tree_y_pred.append(pred)
         
-        #forest_clf.fit(X_train, y_train)
-        #for pred in forest_clf.predict(X_test):
-        #    forest_y_pred.append(pred)  
+        forest_clf.fit(X_train, y_train)
+        for pred in forest_clf.predict(X_test):
+            forest_y_pred.append(pred)  
           
-    predictions = [knn_y_pred, nb_y_pred, tree_y_pred] #TODO forest results
-    titles = ["kNN Classifier (5 neighbors)", "Naive Bayes", "Decision Tree"]
+    predictions = [knn_y_pred, nb_y_pred, tree_y_pred, forest_y_pred] #TODO forest results
+    titles = ["kNN Classifier (5 neighbors)", "Naive Bayes", "Decision Tree", "Random Forest"]
 
     for i in range(len(predictions)):
         myutils.show_results(y_true, predictions[i], stroke_classes, titles[i])

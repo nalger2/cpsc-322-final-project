@@ -464,21 +464,96 @@ def test_decision_tree_classifier_predict():
     prediction3 = tree_clf.predict(X_test_3)
     assert prediction3 == ["yes", "yes"]
 
-interview_X_train = [
-        ["Senior", "Java", "no", "no"],
-        ["Senior", "Java", "no", "yes"],
-        ["Mid", "Python", "no", "no"],
-        ["Junior", "Python", "no", "no"],
-        ["Junior", "R", "yes", "no"],
-        ["Junior", "R", "yes", "yes"],
-        ["Mid", "R", "yes", "yes"],
-        ["Senior", "Python", "no", "no"],
-        ["Senior", "R", "yes", "no"],
-        ["Junior", "Python", "yes", "no"],
-        ["Senior", "Python", "yes", "yes"],
-        ["Mid", "Python", "no", "yes"],
-        ["Mid", "Java", "yes", "no"],
-        ["Junior", "Python", "no", "yes"]
+
+#RANDOM FOREST CLASSIFIER TESTS
+tree1 = \
+    ['Attribute', 'att3', 
+        ['Value', 'no', 
+            ['Attribute', 'att0', 
+                ['Value', 'Junior', 
+                    ['Leaf', 'True', 4, 8]
+                ], 
+                ['Value', 'Mid', 
+                    ['Leaf', 'True', 1, 8]
+                ], 
+                ['Value', 'Senior', 
+                    ['Attribute', 'att2', 
+                        ['Value', 'no', 
+                            ['Leaf', 'False', 2, 3]
+                        ], 
+                        ['Value', 'yes', 
+                            ['Leaf', 'True', 1, 3]
+                        ]
+                    ]
+                ]
+            ]
+        ], 
+        ['Value', 'yes', 
+            ['Leaf', 'False', 1, 9]
+        ]
     ]
-interview_y_train = ["False", "False", "True", "True", "True", "False", "True", "False", "True",
-                         "True", "True", "True", "True", "False"]
+
+tree2 = \
+    ['Attribute', 'att0', 
+        ['Value', 'Junior', 
+            ['Attribute', 'att3', 
+                ['Value', 'no', 
+                    ['Leaf', 'True', 4, 6]
+                ], 
+                ['Value', 'yes', 
+                    ['Leaf', 'False', 2, 6]
+                ]
+            ]
+        ], 
+        ['Value', 'Mid', 
+            ['Leaf', 'True', 1, 9]
+        ], 
+        ['Value', 'Senior', 
+            ['Leaf', 'False', 2, 9]
+        ]
+    ]
+
+tree3 = \
+    ['Attribute', 'att1', 
+        ['Value', 'Java', 
+            ['Leaf', 'False', 3, 9]
+        ], 
+        ['Value', 'Python', 
+            ['Leaf', 'False', 2, 2]
+        ], 
+        ['Value', 'R', 
+            ['Leaf', 'True', 4, 9]
+        ]
+    ]
+
+# split dataset into test set and "remainder set"
+X_train_holdout, X_test_holdout, y_train_holdout, y_test_holdout = \
+        myevaluation.train_test_split(interview_X_train, interview_y_train, 0.33, None, False)
+
+def test_random_forest_classifier_fit():
+    np.random.seed(0)
+
+    train = [X_train_holdout[i] + [y_train_holdout[i]] for i in range(len(X_train_holdout))]
+
+    random_forest_clf = MyRandomForestClassifier(random_forest=True, N=5, M=3, F=2)
+    random_forest_clf.fit(X_train_holdout, y_train_holdout)
+
+    test_trees = []
+    test_trees.append(tree1)
+    test_trees.append(tree2)
+    test_trees.append(tree3)
+
+    for i in range(len(random_forest_clf.trees)):
+        assert random_forest_clf.trees[i] == test_trees[i]
+
+def test_random_forest_classifier_predict():
+    np.random.seed(0)
+    y_pred_sol = ["True", "False", "False", "True", "False"]
+    random_forest_clf = MyRandomForestClassifier(random_forest=True, N=5, M=3, F=2)
+    random_forest_clf.fit(X_train_holdout, y_train_holdout)
+    y_pred = random_forest_clf.predict(X_test_holdout)
+    print("y_test:", y_test_holdout)
+    print("y_pred:", y_pred)   
+
+    for i in range(len(y_pred)):
+        assert y_pred == y_pred_sol

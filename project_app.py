@@ -1,4 +1,7 @@
 from flask import Flask, request, jsonify
+from mysklearn.myclassifiers import MyKNeighborsClassifier
+from mysklearn.mypytable import MyPyTable
+from mysklearn import myevaluation
 import os
 
 app = Flask(__name__)
@@ -26,7 +29,8 @@ def predict():
     print("age:", age)
 
     #TODO fix hardcoding
-    prediction = predict_stroke([smoking_status, bmi, heart_disease, avg_glucose_level, age]) #like a row in x_test
+    #ORDER: age,heart_disease,avg_glucose_level,bmi,smoking_status,stroke
+    prediction = predict_stroke([age,heart_disease,avg_glucose_level,bmi,smoking_status]) #like a row in x_test
     #if anything goes wrong, return None
     if prediction is not None:
         result = {"Stroke prediction": prediction}
@@ -34,7 +38,16 @@ def predict():
     return "Error making prediction", 400 #bad request = blame the client :)
 
 def predict_stroke(instance):
-    return 1.0 #HARDCODED TODO FIX
+    knn_clf = MyKNeighborsClassifier()
+    stroke_data = MyPyTable()
+    stroke_data.load_from_file("input_data/stroke_data_atts_selected.csv")
+    X = [inst[:-1] for inst in stroke_data.data]
+    y = [inst[-1] for inst in stroke_data.data]
+    
+    #X_train_folds, X_test_folds = myevaluation.kfold_cross_validation(X, n_splits=10, random_state=0, shuffle=True)
+    knn_clf.fit(X, y)
+    prediction = knn_clf.predict([instance])
+    return prediction
 
 if __name__ == "__main__":
     app.run()

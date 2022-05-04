@@ -28,16 +28,15 @@ def predict():
     print("avg_glucose_level:", avg_glucose_level)
     print("age:", age)
 
-    #TODO fix hardcoding
     #ORDER: age,heart_disease,avg_glucose_level,bmi,smoking_status,stroke
     prediction = predict_stroke([age,heart_disease,avg_glucose_level,bmi,smoking_status]) #like a row in x_test
-    #if anything goes wrong, return None
     if prediction is not None:
         result = {"Stroke prediction": prediction}
         return jsonify(result), 200
     return "Error making prediction", 400 #bad request = blame the client :)
 
 def predict_stroke(instance):
+    #create kNN classifier
     knn_clf = MyKNeighborsClassifier()
     stroke_data = MyPyTable()
     stroke_data.load_from_file("input_data/stroke_data_atts_selected.csv")

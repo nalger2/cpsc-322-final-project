@@ -36,14 +36,12 @@ def predict():
     return "Error making prediction", 400 #bad request = blame the client :)
 
 def predict_stroke(instance):
-    #create kNN classifier
     knn_clf = MyKNeighborsClassifier()
     stroke_data = MyPyTable()
     stroke_data.load_from_file("input_data/stroke_data_atts_selected.csv")
     X = [inst[:-1] for inst in stroke_data.data]
     y = [inst[-1] for inst in stroke_data.data]
     
-    #X_train_folds, X_test_folds = myevaluation.kfold_cross_validation(X, n_splits=10, random_state=0, shuffle=True)
     knn_clf.fit(X, y)
     prediction = knn_clf.predict([instance])
     return prediction

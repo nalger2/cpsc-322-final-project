@@ -12,6 +12,7 @@ This project performs classification of stroke data with 4 different classifiers
 * The folder `input_data`: contains the original dataset csv file: `stroke_data.csv`, as well as various cleaned versions of the dataset
 * `project_app.py` contains the flask app of our best classifier 
     * **To run the flask web app, run `python project_app.py`**
+    * Edit prediction by modifying request values of keys
 
 ### Other Files
 * `test_myclassifiers`: demonstrates our test driven development, and houses the tests for our various classifiers. 
